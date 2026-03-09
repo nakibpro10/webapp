@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import {
   Home,
   ChevronRight,
@@ -24,6 +24,7 @@ import CreateFolderModal from '../components/modals/CreateFolderModal'
 import RenameModal from '../components/modals/RenameModal'
 import DeleteModal from '../components/modals/DeleteModal'
 import type { ViewMode, SortField, FolderData, FileData } from '../types/files'
+import ContextMenu from '../components/ContextMenu'
 import './MyFiles.css'
 
 interface SortOption {
@@ -71,6 +72,27 @@ export default function MyFiles() {
 
   /* ── upload panel ref ── */
   const uploadPanelRef = useRef<UploadPanelHandle>(null)
+
+  /* ── context menu state ── */
+  const [contextMenu, setContextMenu] = useState<{ x: number; y: number; item: FileData | FolderData } | null>(null)
+
+  /* ── sidebar "New" button event ── */
+  useEffect(() => {
+    function handleNewUpload() {
+      uploadPanelRef.current?.triggerFileInput()
+    }
+    window.addEventListener('nakib-cloud:new-upload', handleNewUpload)
+    return () => window.removeEventListener('nakib-cloud:new-upload', handleNewUpload)
+  }, [])
+
+  /* ── context menu handler ── */
+  function handleContextMenu(e: React.MouseEvent, id: string) {
+    e.stopPropagation()
+    const allItems = [...(folders as (FileData | FolderData)[]), ...(files as (FileData | FolderData)[])]
+    const item = allItems.find(i => i.id === id)
+    if (!item) return
+    setContextMenu({ x: e.clientX, y: e.clientY, item })
+  }
 
   /* ── filtering ── */
   const query = searchQuery.toLowerCase().trim()
@@ -276,6 +298,7 @@ export default function MyFiles() {
               lang={language}
               onSelect={toggleSelect}
               onOpen={handleOpenFolder}
+              onContextMenu={handleContextMenu}
             />
           ))}
           {filteredFiles.map((file) => (
@@ -286,6 +309,7 @@ export default function MyFiles() {
               selected={selectedItems.includes(file.id)}
               lang={language}
               onSelect={toggleSelect}
+              onContextMenu={handleContextMenu}
             />
           ))}
         </div>
@@ -318,6 +342,19 @@ export default function MyFiles() {
         encryptionKey={null}
         onUploadComplete={refresh}
       />
+
+      {/* ── Context Menu ── */}
+      {contextMenu && (
+        <ContextMenu
+          x={contextMenu.x}
+          y={contextMenu.y}
+          item={contextMenu.item}
+          lang={language}
+          onClose={() => setContextMenu(null)}
+          onRename={(item) => { setRenameItem(item); setContextMenu(null) }}
+          onDelete={(item) => { setDeleteItem(item); setContextMenu(null) }}
+        />
+      )}
     </>
   )
 }
