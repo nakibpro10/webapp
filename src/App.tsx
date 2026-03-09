@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import AuthLayout from './layouts/AuthLayout'
 import DashboardLayout from './layouts/DashboardLayout'
 import Auth from './pages/Auth'
+import Home from './pages/Home'
 import MyFiles from './pages/MyFiles'
 import Recent from './pages/Recent'
 import Starred from './pages/Starred'
@@ -22,7 +23,7 @@ function App() {
 
         {/* Dashboard routes */}
         <Route path="/dashboard" element={<DashboardLayout />}>
-          <Route index element={<MyFiles />} />
+          <Route index element={<Home />} />
           <Route path="my-files" element={<MyFiles />} />
           <Route path="recent" element={<Recent />} />
           <Route path="starred" element={<Starred />} />
