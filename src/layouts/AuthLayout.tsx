@@ -1,8 +1,17 @@
-import { Outlet } from 'react-router-dom'
+import { Outlet, Navigate } from 'react-router-dom'
 import { Lock, CloudUpload, Shield, Smartphone } from 'lucide-react'
+import { useAuth } from '../context/AuthContext'
 import './AuthLayout.css'
 
 export default function AuthLayout() {
+  const { user, loading } = useAuth()
+
+  // If still checking auth state, show nothing
+  if (loading) return null
+
+  // If already logged in, redirect to dashboard
+  if (user) return <Navigate to="/dashboard" replace />
+
   return (
     <div className="auth-page">
       {/* Left Side - Decorative */}
