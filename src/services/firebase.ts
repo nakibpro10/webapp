@@ -1,6 +1,6 @@
-import { initializeApp } from 'firebase/app'
-import { getAuth, GoogleAuthProvider } from 'firebase/auth'
-import { getFirestore } from 'firebase/firestore'
+import { initializeApp, type FirebaseApp } from 'firebase/app'
+import { getAuth, GoogleAuthProvider, type Auth } from 'firebase/auth'
+import { getFirestore, type Firestore } from 'firebase/firestore'
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -11,8 +11,22 @@ const firebaseConfig = {
   appId: import.meta.env.VITE_FIREBASE_APP_ID,
 }
 
-const app = initializeApp(firebaseConfig)
-export const auth = getAuth(app)
-export const db = getFirestore(app)
+let app: FirebaseApp
+let auth: Auth
+let db: Firestore
+
+try {
+  app = initializeApp(firebaseConfig)
+  auth = getAuth(app)
+  db = getFirestore(app)
+} catch (e) {
+  console.warn('Firebase initialization failed. Check your .env config.', e)
+  // Create a minimal app so imports don't crash.
+  // Auth operations will fail at call-time with clear errors.
+  app = initializeApp({ apiKey: 'dummy', projectId: 'dummy' }, 'fallback')
+  auth = getAuth(app)
+  db = getFirestore(app)
+}
+
+export { app as default, auth, db }
 export const googleProvider = new GoogleAuthProvider()
-export default app

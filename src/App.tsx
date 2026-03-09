@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import AuthLayout from './layouts/AuthLayout'
 import DashboardLayout from './layouts/DashboardLayout'
+import Auth from './pages/Auth'
 
 function App() {
   return (
@@ -11,7 +12,7 @@ function App() {
 
         {/* Auth routes */}
         <Route path="/auth" element={<AuthLayout />}>
-          <Route index element={<div>Auth form placeholder</div>} />
+          <Route index element={<Auth />} />
         </Route>
 
         {/* Dashboard routes */}
