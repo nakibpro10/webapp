@@ -16,6 +16,7 @@ import {
 import { useAuth } from '../context/AuthContext'
 import { useLanguage } from '../context/LanguageContext'
 import FileCard from '../components/FileCard'
+import FilePreviewModal from '../components/FilePreviewModal'
 import { getFileType } from '../utils/files'
 import type { ViewMode, SortField, FileData } from '../types/files'
 import './CategoryFiles.css'
@@ -86,6 +87,7 @@ export default function CategoryFiles({ type }: { type: CategoryType }) {
   const [viewMode, setViewMode] = useState<ViewMode>('grid')
   const [sortField, setSortField] = useState<SortField>('name')
   const [sortOpen, setSortOpen] = useState(false)
+  const [previewFile, setPreviewFile] = useState<FileData | null>(null)
 
   const loadFiles = useCallback(async () => {
     if (!user) { setLoading(false); return }
@@ -211,9 +213,17 @@ export default function CategoryFiles({ type }: { type: CategoryType }) {
               view={viewMode}
               selected={false}
               lang={language}
+              onClick={setPreviewFile}
             />
           ))}
         </div>
+      )}
+      {previewFile && (
+        <FilePreviewModal
+          file={previewFile}
+          lang={language}
+          onClose={() => setPreviewFile(null)}
+        />
       )}
     </>
   )

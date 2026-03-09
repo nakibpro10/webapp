@@ -10,6 +10,7 @@ import { useAuth } from '../context/AuthContext'
 import { useLanguage } from '../context/LanguageContext'
 import FileCard from '../components/FileCard'
 import FolderCard from '../components/FolderCard'
+import FilePreviewModal from '../components/FilePreviewModal'
 import type { ViewMode, FileData, FolderData } from '../types/files'
 import './Starred.css'
 
@@ -24,6 +25,7 @@ export default function Starred() {
   const [folders, setFolders] = useState<FolderData[]>([])
   const [loading, setLoading] = useState(true)
   const [viewMode, setViewMode] = useState<ViewMode>('grid')
+  const [previewFile, setPreviewFile] = useState<FileData | null>(null)
 
   const loadData = useCallback(async () => {
     if (!user) { setLoading(false); return }
@@ -139,9 +141,17 @@ export default function Starred() {
               view={viewMode}
               selected={false}
               lang={language}
+              onClick={setPreviewFile}
             />
           ))}
         </div>
+      )}
+      {previewFile && (
+        <FilePreviewModal
+          file={previewFile}
+          lang={language}
+          onClose={() => setPreviewFile(null)}
+        />
       )}
     </>
   )
