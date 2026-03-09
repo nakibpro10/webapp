@@ -613,6 +613,15 @@
     to { transform: rotate(360deg); }
 }
 
+@media (prefers-reduced-motion: reduce) {
+    .empty-state-icon::before {
+        animation: none;
+    }
+    .loading-spinner {
+        animation: none;
+    }
+}
+
 /* ==================== RESPONSIVE ==================== */
 @media (max-width: 768px) {
     .content-header {

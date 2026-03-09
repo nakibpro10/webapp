@@ -22,7 +22,14 @@ import FolderCard from '../components/FolderCard'
 import type { ViewMode, SortField, FolderData } from '../types/files'
 import './MyFiles.css'
 
-const SORT_OPTIONS: { key: SortField; labelEn: string; labelBn: string; icon: React.ComponentType<{ size?: number; className?: string }> }[] = [
+interface SortOption {
+  key: SortField
+  labelEn: string
+  labelBn: string
+  icon: React.ComponentType<{ size?: number; className?: string }>
+}
+
+const SORT_OPTIONS: SortOption[] = [
   { key: 'name', labelEn: 'Name', labelBn: 'নাম', icon: ArrowDownAZ },
   { key: 'date', labelEn: 'Date Modified', labelBn: 'পরিবর্তনের তারিখ', icon: Calendar },
   { key: 'size', labelEn: 'Size', labelBn: 'আকার', icon: Weight },

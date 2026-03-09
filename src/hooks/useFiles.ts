@@ -76,7 +76,7 @@ export default function useFiles(): UseFilesReturn {
       }))
 
       // Load files from Worker API
-      const response = await fetch(`${WORKER_URL}/files?userId=${user.uid}`)
+      const response = await fetch(`${WORKER_URL}/files?userId=${encodeURIComponent(user.uid)}`)
       const data = await response.json()
 
       let loadedFiles: FileData[] = []
