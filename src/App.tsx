@@ -3,6 +3,10 @@ import AuthLayout from './layouts/AuthLayout'
 import DashboardLayout from './layouts/DashboardLayout'
 import Auth from './pages/Auth'
 import MyFiles from './pages/MyFiles'
+import Recent from './pages/Recent'
+import Starred from './pages/Starred'
+import Trash from './pages/Trash'
+import CategoryFiles from './pages/CategoryFiles'
 
 function App() {
   return (
@@ -19,6 +23,14 @@ function App() {
         {/* Dashboard routes */}
         <Route path="/dashboard" element={<DashboardLayout />}>
           <Route index element={<MyFiles />} />
+          <Route path="my-files" element={<MyFiles />} />
+          <Route path="recent" element={<Recent />} />
+          <Route path="starred" element={<Starred />} />
+          <Route path="trash" element={<Trash />} />
+          <Route path="images" element={<CategoryFiles type="image" />} />
+          <Route path="videos" element={<CategoryFiles type="video" />} />
+          <Route path="audio" element={<CategoryFiles type="audio" />} />
+          <Route path="documents" element={<CategoryFiles type="document" />} />
         </Route>
       </Routes>
     </BrowserRouter>
