@@ -95,7 +95,19 @@ export default function MyFiles() {
     const allItems = [...(folders as (FileData | FolderData)[]), ...(files as (FileData | FolderData)[])]
     const item = allItems.find(i => i.id === id)
     if (!item) return
-    setContextMenu({ x: e.clientX, y: e.clientY, item })
+    setContextMenu({ x: e.clientX + 6, y: e.clientY + 6, item })
+  }
+
+  /* ── download handler ── */
+  function handleDownload(file: FileData) {
+    const url = file.url
+    if (!url) return
+    const a = document.createElement('a')
+    a.href = url
+    a.download = file.name
+    document.body.appendChild(a)
+    a.click()
+    document.body.removeChild(a)
   }
 
   /* ── filtering ── */
@@ -367,6 +379,7 @@ export default function MyFiles() {
           onClose={() => setContextMenu(null)}
           onRename={(item) => { setRenameItem(item); setContextMenu(null) }}
           onDelete={(item) => { setDeleteItem(item); setContextMenu(null) }}
+          onDownload={handleDownload}
         />
       )}
     </>
