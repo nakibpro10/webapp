@@ -23,7 +23,7 @@ function groupByDate(files: FileData[]): DateGroup[] {
   const now = new Date()
   const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate())
   const yesterdayStart = new Date(todayStart.getTime() - 86_400_000)
-  const weekStart = new Date(todayStart.getTime() - 7 * 86_400_000)
+  const weekStart = new Date(todayStart.getTime() - 6 * 86_400_000)
 
   const today: FileData[] = []
   const yesterday: FileData[] = []
