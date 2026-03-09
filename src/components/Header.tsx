@@ -1,7 +1,9 @@
+import { useState, useEffect, useRef } from 'react'
 import {
   Menu,
   Search,
   Moon,
+  Sun,
   ChevronDown,
   UserCog,
   Crown,
@@ -10,6 +12,10 @@ import {
   FileText,
   LogOut,
 } from 'lucide-react'
+import { useNavigate } from 'react-router-dom'
+import { useAuth } from '../context/AuthContext'
+import { useLanguage } from '../context/LanguageContext'
+import { useTheme } from '../context/ThemeContext'
 import './Header.css'
 
 interface HeaderProps {
@@ -17,6 +23,32 @@ interface HeaderProps {
 }
 
 export default function Header({ onMenuToggle }: HeaderProps) {
+  const { user, logout } = useAuth()
+  const { toggleLanguage } = useLanguage()
+  const { theme, toggleTheme } = useTheme()
+  const navigate = useNavigate()
+  const [dropdownOpen, setDropdownOpen] = useState(false)
+  const dropdownRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    function handleClickOutside(e: MouseEvent) {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+        setDropdownOpen(false)
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [])
+
+  async function handleLogout() {
+    await logout()
+    navigate('/auth')
+  }
+
+  const displayName = user?.displayName || user?.email?.split('@')[0] || 'User'
+  const avatarUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(displayName)}&background=667eea&color=fff`
+  const avatarUrlLg = `https://ui-avatars.com/api/?name=${encodeURIComponent(displayName)}&background=667eea&color=fff&size=72`
+
   return (
     <header className="header">
       <button className="menu-toggle" onClick={onMenuToggle}>
@@ -37,72 +69,76 @@ export default function Header({ onMenuToggle }: HeaderProps) {
       {/* Header Actions */}
       <div className="header-actions">
         {/* Language Toggle */}
-        <button className="header-btn" title="Toggle Language">
+        <button className="header-btn" title="Toggle Language" onClick={toggleLanguage}>
           <span className="lang-en" style={{ fontSize: '11px', fontWeight: 700 }}>বাং</span>
           <span className="lang-bn" style={{ fontSize: '11px', fontWeight: 700 }}>EN</span>
         </button>
 
         {/* Theme Toggle */}
-        <button className="header-btn" title="Toggle Theme">
-          <Moon size={20} />
+        <button className="header-btn" title="Toggle Theme" onClick={toggleTheme}>
+          {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
         </button>
 
-        {/* User Profile */}
-        <div className="user-profile">
-          <img
-            className="user-avatar"
-            src="https://ui-avatars.com/api/?name=U&background=667eea&color=fff"
-            alt="User"
-          />
-          <span className="user-name">User</span>
-          <ChevronDown size={12} />
-        </div>
-
-        {/* User Dropdown */}
-        <div className="user-dropdown">
-          <div className="user-dropdown-header">
+        {/* User Profile Wrapper */}
+        <div className="user-profile-wrapper" ref={dropdownRef}>
+          <div className="user-profile" onClick={() => setDropdownOpen(prev => !prev)}>
             <img
-              className="user-dropdown-avatar"
-              src="https://ui-avatars.com/api/?name=U&background=667eea&color=fff&size=72"
+              className="user-avatar"
+              src={avatarUrl}
               alt="User"
             />
-            <div className="user-dropdown-name">User</div>
-            <div className="user-dropdown-email">user@example.com</div>
+            <span className="user-name">{displayName}</span>
+            <ChevronDown size={12} />
           </div>
-          <div className="user-dropdown-menu">
-            <button className="user-dropdown-item" type="button">
-              <UserCog size={16} />
-              <span className="lang-en">Account Settings</span>
-              <span className="lang-bn">অ্যাকাউন্ট সেটিংস</span>
-            </button>
-            <button className="user-dropdown-item" type="button">
-              <Crown size={16} />
-              <span className="lang-en">Subscription</span>
-              <span className="lang-bn">সাবস্ক্রিপশন</span>
-            </button>
-            <button className="user-dropdown-item" type="button">
-              <Key size={16} />
-              <span className="lang-en">Change PIN</span>
-              <span className="lang-bn">পিন পরিবর্তন</span>
-            </button>
-            <div className="user-dropdown-divider" />
-            <button className="user-dropdown-item" type="button">
-              <Headset size={16} />
-              <span className="lang-en">Help &amp; Support</span>
-              <span className="lang-bn">সাহায্য ও সাপোর্ট</span>
-            </button>
-            <button className="user-dropdown-item" type="button">
-              <FileText size={16} />
-              <span className="lang-en">Terms of Service</span>
-              <span className="lang-bn">সেবার শর্তাবলী</span>
-            </button>
-            <div className="user-dropdown-divider" />
-            <button className="user-dropdown-item danger" type="button">
-              <LogOut size={16} />
-              <span className="lang-en">Sign Out</span>
-              <span className="lang-bn">সাইন আউট</span>
-            </button>
-          </div>
+
+          {/* User Dropdown */}
+          {dropdownOpen && (
+            <div className="user-dropdown">
+              <div className="user-dropdown-header">
+                <img
+                  className="user-dropdown-avatar"
+                  src={avatarUrlLg}
+                  alt="User"
+                />
+                <div className="user-dropdown-name">{displayName}</div>
+                <div className="user-dropdown-email">{user?.email || ''}</div>
+              </div>
+              <div className="user-dropdown-menu">
+                <button className="user-dropdown-item" type="button">
+                  <UserCog size={16} />
+                  <span className="lang-en">Account Settings</span>
+                  <span className="lang-bn">অ্যাকাউন্ট সেটিংস</span>
+                </button>
+                <button className="user-dropdown-item" type="button">
+                  <Crown size={16} />
+                  <span className="lang-en">Subscription</span>
+                  <span className="lang-bn">সাবস্ক্রিপশন</span>
+                </button>
+                <button className="user-dropdown-item" type="button">
+                  <Key size={16} />
+                  <span className="lang-en">Change PIN</span>
+                  <span className="lang-bn">পিন পরিবর্তন</span>
+                </button>
+                <div className="user-dropdown-divider" />
+                <button className="user-dropdown-item" type="button">
+                  <Headset size={16} />
+                  <span className="lang-en">Help &amp; Support</span>
+                  <span className="lang-bn">সাহায্য ও সাপোর্ট</span>
+                </button>
+                <button className="user-dropdown-item" type="button">
+                  <FileText size={16} />
+                  <span className="lang-en">Terms of Service</span>
+                  <span className="lang-bn">সেবার শর্তাবলী</span>
+                </button>
+                <div className="user-dropdown-divider" />
+                <button className="user-dropdown-item danger" type="button" onClick={handleLogout}>
+                  <LogOut size={16} />
+                  <span className="lang-en">Logout</span>
+                  <span className="lang-bn">লগআউট</span>
+                </button>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </header>

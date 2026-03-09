@@ -1,14 +1,19 @@
-import { Outlet } from 'react-router-dom'
+import { Outlet, Navigate } from 'react-router-dom'
 import { useState } from 'react'
+import { useAuth } from '../context/AuthContext'
 import Sidebar from '../components/Sidebar'
 import Header from '../components/Header'
 import './DashboardLayout.css'
 
 export default function DashboardLayout() {
+  const { user, loading } = useAuth()
   const [sidebarOpen, setSidebarOpen] = useState(false)
 
   const toggleSidebar = () => setSidebarOpen(prev => !prev)
   const closeSidebar = () => setSidebarOpen(false)
+
+  if (loading) return null
+  if (!user) return <Navigate to="/auth" replace />
 
   return (
     <div className="dashboard">
