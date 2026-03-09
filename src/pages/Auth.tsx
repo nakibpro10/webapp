@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 import { useState } from 'react'
 import {
   Mail,
@@ -11,6 +12,7 @@ import {
   Circle,
   Loader,
 } from 'lucide-react'
+import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import { useLanguage } from '../context/LanguageContext'
 import { useTheme } from '../context/ThemeContext'
@@ -42,6 +44,8 @@ function getStrength(pw: string) {
 }
 
 export default function Auth() {
+  const navigate = useNavigate()
+
   /* ── state ── */
   const [tab, setTab] = useState<'login' | 'signup'>('login')
 
@@ -80,6 +84,7 @@ export default function Auth() {
     setLoginLoading(true)
     try {
       await login(loginEmail.trim(), loginPassword, rememberMe)
+      navigate('/dashboard', { replace: true })
     } catch (err: unknown) {
       const code = (err as { code?: string }).code ?? ''
       if (code === 'auth/user-not-found')
@@ -118,6 +123,7 @@ export default function Auth() {
     setSignupLoading(true)
     try {
       await signup(signupName.trim(), signupEmail.trim(), signupPassword)
+      navigate('/dashboard', { replace: true })
     } catch (err: unknown) {
       const code = (err as { code?: string }).code ?? ''
       if (code === 'auth/email-already-in-use')
@@ -138,6 +144,7 @@ export default function Auth() {
     setGoogleLoading(true)
     try {
       await loginWithGoogle()
+      navigate('/dashboard', { replace: true })
     } catch (err: unknown) {
       const code = (err as { code?: string }).code ?? ''
       if (code !== 'auth/popup-closed-by-user') {
@@ -341,7 +348,7 @@ export default function Auth() {
             </div>
 
             {/* Strength bars */}
-            <div className={`password-strength${showCriteria ? ' show' : ''}`}>
+            <div className={`password-strength${showCriteria ? ' show' : ''}`}>  
               {[1, 2, 3, 4].map((i) => (
                 <div
                   key={i}
@@ -359,23 +366,23 @@ export default function Auth() {
             </div>
 
             {/* Criteria */}
-            <div className={`password-criteria${showCriteria ? ' show' : ''}`}>
-              <div className={`criteria-item${strength.length ? ' valid' : ''}`}>
+            <div className={`password-criteria${showCriteria ? ' show' : ''}`}>  
+              <div className={`criteria-item${strength.length ? ' valid' : ''}`}>  
                 <Circle size={10} />
                 <span className="lang-en">At least 6 characters</span>
                 <span className="lang-bn">কমপক্ষে ৬টি অক্ষর</span>
               </div>
-              <div className={`criteria-item${strength.upper ? ' valid' : ''}`}>
+              <div className={`criteria-item${strength.upper ? ' valid' : ''}`}>  
                 <Circle size={10} />
                 <span className="lang-en">One uppercase letter</span>
                 <span className="lang-bn">একটি বড় হাতের অক্ষর</span>
               </div>
-              <div className={`criteria-item${strength.lower ? ' valid' : ''}`}>
+              <div className={`criteria-item${strength.lower ? ' valid' : ''}`}>  
                 <Circle size={10} />
                 <span className="lang-en">One lowercase letter</span>
                 <span className="lang-bn">একটি ছোট হাতের অক্ষর</span>
               </div>
-              <div className={`criteria-item${strength.number ? ' valid' : ''}`}>
+              <div className={`criteria-item${strength.number ? ' valid' : ''}`}>  
                 <Circle size={10} />
                 <span className="lang-en">One number</span>
                 <span className="lang-bn">একটি সংখ্যা</span>
