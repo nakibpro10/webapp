@@ -26,6 +26,7 @@ export default function Home() {
     async function loadStats() {
       try {
         const res = await fetch(`${WORKER_URL}/files?userId=${encodeURIComponent(uid)}`)
+        if (!res.ok) throw new Error(`HTTP ${res.status}`)
         const data = await res.json()
         if (data.success) {
           const files = (data.files as FileData[]).filter((f) => !f.trashed)

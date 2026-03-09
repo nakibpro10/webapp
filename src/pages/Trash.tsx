@@ -37,6 +37,7 @@ export default function Trash() {
     try {
       // Trashed files from Worker
       const res = await fetch(`${WORKER_URL}/files?userId=${encodeURIComponent(user.uid)}`)
+      if (!res.ok) throw new Error(`HTTP ${res.status}`)
       const data = await res.json()
       if (data.success) {
         setFiles((data.files as FileData[]).filter((f) => f.trashed === true))
@@ -74,6 +75,8 @@ export default function Trash() {
       if (res.ok) {
         showToast(en ? 'File restored' : 'ফাইল পুনরুদ্ধার করা হয়েছে', 'success')
         await loadData()
+      } else {
+        showToast(en ? 'Restore failed' : 'পুনরুদ্ধার ব্যর্থ', 'error')
       }
     } catch (err) {
       console.error('Restore file failed:', err)
@@ -118,6 +121,8 @@ export default function Trash() {
       if (res.ok) {
         showToast(en ? 'Permanently deleted' : 'স্থায়ীভাবে মুছে ফেলা হয়েছে', 'success')
         await loadData()
+      } else {
+        showToast(en ? 'Delete failed' : 'মুছে ফেলা ব্যর্থ', 'error')
       }
     } catch (err) {
       console.error('Delete file failed:', err)
@@ -157,12 +162,13 @@ export default function Trash() {
     try {
       // Delete all trashed files
       await Promise.all(
-        files.map((f) =>
-          fetch(
+        files.map(async (f) => {
+          const r = await fetch(
             `${WORKER_URL}/delete/${encodeURIComponent(f.id)}?userId=${encodeURIComponent(user.uid)}`,
             { method: 'DELETE' },
-          ),
-        ),
+          )
+          if (!r.ok) throw new Error(`Failed to delete file ${f.id}`)
+        }),
       )
 
       // Delete all trashed folders

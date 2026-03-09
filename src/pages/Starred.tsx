@@ -33,6 +33,7 @@ export default function Starred() {
     try {
       // Files from Worker
       const res = await fetch(`${WORKER_URL}/files?userId=${encodeURIComponent(user.uid)}`)
+      if (!res.ok) throw new Error(`HTTP ${res.status}`)
       const data = await res.json()
       if (data.success) {
         setFiles(

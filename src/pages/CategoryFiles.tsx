@@ -94,6 +94,7 @@ export default function CategoryFiles({ type }: { type: CategoryType }) {
     setLoading(true)
     try {
       const res = await fetch(`${WORKER_URL}/files?userId=${encodeURIComponent(user.uid)}`)
+      if (!res.ok) throw new Error(`HTTP ${res.status}`)
       const data = await res.json()
       if (data.success) {
         const filtered = (data.files as FileData[]).filter((f) => {
