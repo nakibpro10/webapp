@@ -8,7 +8,10 @@ import { useAuth } from '../context/AuthContext'
 import { useLanguage } from '../context/LanguageContext'
 import FileCard from '../components/FileCard'
 import FilePreviewModal from '../components/FilePreviewModal'
-import type { ViewMode, FileData } from '../types/files'
+import ContextMenu from '../components/ContextMenu'
+import RenameModal from '../components/modals/RenameModal'
+import DeleteModal from '../components/modals/DeleteModal'
+import type { ViewMode, FileData, FolderData } from '../types/files'
 import './Recent.css'
 
 const WORKER_URL = 'https://cloud.nakibpro1.workers.dev'
@@ -56,6 +59,11 @@ export default function Recent() {
   const [viewMode, setViewMode] = useState<ViewMode>('grid')
   const [previewFile, setPreviewFile] = useState<FileData | null>(null)
 
+  /* ── context menu state ── */
+  const [contextMenu, setContextMenu] = useState<{ x: number; y: number; item: FileData | FolderData } | null>(null)
+  const [renameItem, setRenameItem] = useState<(FileData | FolderData) | null>(null)
+  const [deleteItem, setDeleteItem] = useState<(FileData | FolderData) | null>(null)
+
   const loadFiles = useCallback(async () => {
     if (!user) { setLoading(false); return }
     setLoading(true)
@@ -76,6 +84,14 @@ export default function Recent() {
   }, [user])
 
   useEffect(() => { loadFiles() }, [loadFiles])
+
+  /* ── context menu handler ── */
+  function handleContextMenu(e: React.MouseEvent, id: string) {
+    e.stopPropagation()
+    const found = files.find(f => f.id === id)
+    if (!found) return
+    setContextMenu({ x: e.clientX, y: e.clientY, item: found })
+  }
 
   /* ── loading ── */
   if (loading) {
@@ -155,6 +171,7 @@ export default function Recent() {
                 selected={false}
                 lang={language}
                 onClick={setPreviewFile}
+                onContextMenu={handleContextMenu}
               />
             ))}
           </div>
@@ -167,6 +184,35 @@ export default function Recent() {
           onClose={() => setPreviewFile(null)}
         />
       )}
+
+      {/* ── Context Menu ── */}
+      {contextMenu && (
+        <ContextMenu
+          x={contextMenu.x}
+          y={contextMenu.y}
+          item={contextMenu.item}
+          lang={language}
+          onClose={() => setContextMenu(null)}
+          onRename={(item) => { setRenameItem(item); setContextMenu(null) }}
+          onDelete={(item) => { setDeleteItem(item); setContextMenu(null) }}
+        />
+      )}
+
+      {/* ── Rename Modal ── */}
+      <RenameModal
+        open={renameItem !== null}
+        item={renameItem}
+        onClose={() => setRenameItem(null)}
+        onRenamed={() => { setRenameItem(null); loadFiles() }}
+      />
+
+      {/* ── Delete Modal ── */}
+      <DeleteModal
+        open={deleteItem !== null}
+        item={deleteItem}
+        onClose={() => setDeleteItem(null)}
+        onDeleted={() => { setDeleteItem(null); loadFiles() }}
+      />
     </>
   )
 }

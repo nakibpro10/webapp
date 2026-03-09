@@ -11,6 +11,9 @@ import { useLanguage } from '../context/LanguageContext'
 import FileCard from '../components/FileCard'
 import FolderCard from '../components/FolderCard'
 import FilePreviewModal from '../components/FilePreviewModal'
+import ContextMenu from '../components/ContextMenu'
+import RenameModal from '../components/modals/RenameModal'
+import DeleteModal from '../components/modals/DeleteModal'
 import type { ViewMode, FileData, FolderData } from '../types/files'
 import './Starred.css'
 
@@ -26,6 +29,11 @@ export default function Starred() {
   const [loading, setLoading] = useState(true)
   const [viewMode, setViewMode] = useState<ViewMode>('grid')
   const [previewFile, setPreviewFile] = useState<FileData | null>(null)
+
+  /* ── context menu state ── */
+  const [contextMenu, setContextMenu] = useState<{ x: number; y: number; item: FileData | FolderData } | null>(null)
+  const [renameItem, setRenameItem] = useState<(FileData | FolderData) | null>(null)
+  const [deleteItem, setDeleteItem] = useState<(FileData | FolderData) | null>(null)
 
   const loadData = useCallback(async () => {
     if (!user) { setLoading(false); return }
@@ -57,6 +65,15 @@ export default function Starred() {
   }, [user])
 
   useEffect(() => { loadData() }, [loadData])
+
+  /* ── context menu handler ── */
+  function handleContextMenu(e: React.MouseEvent, id: string) {
+    e.stopPropagation()
+    const found = (folders as (FileData | FolderData)[]).find(i => i.id === id)
+      ?? (files as (FileData | FolderData)[]).find(i => i.id === id)
+    if (!found) return
+    setContextMenu({ x: e.clientX, y: e.clientY, item: found })
+  }
 
   const totalCount = folders.length + files.length
 
@@ -132,6 +149,7 @@ export default function Starred() {
               view={viewMode}
               selected={false}
               lang={language}
+              onContextMenu={handleContextMenu}
             />
           ))}
           {files.map((file) => (
@@ -142,6 +160,7 @@ export default function Starred() {
               selected={false}
               lang={language}
               onClick={setPreviewFile}
+              onContextMenu={handleContextMenu}
             />
           ))}
         </div>
@@ -153,6 +172,35 @@ export default function Starred() {
           onClose={() => setPreviewFile(null)}
         />
       )}
+
+      {/* ── Context Menu ── */}
+      {contextMenu && (
+        <ContextMenu
+          x={contextMenu.x}
+          y={contextMenu.y}
+          item={contextMenu.item}
+          lang={language}
+          onClose={() => setContextMenu(null)}
+          onRename={(item) => { setRenameItem(item); setContextMenu(null) }}
+          onDelete={(item) => { setDeleteItem(item); setContextMenu(null) }}
+        />
+      )}
+
+      {/* ── Rename Modal ── */}
+      <RenameModal
+        open={renameItem !== null}
+        item={renameItem}
+        onClose={() => setRenameItem(null)}
+        onRenamed={() => { setRenameItem(null); loadData() }}
+      />
+
+      {/* ── Delete Modal ── */}
+      <DeleteModal
+        open={deleteItem !== null}
+        item={deleteItem}
+        onClose={() => setDeleteItem(null)}
+        onDeleted={() => { setDeleteItem(null); loadData() }}
+      />
     </>
   )
 }
