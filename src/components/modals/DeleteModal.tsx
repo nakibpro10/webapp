@@ -43,7 +43,7 @@ export default function DeleteModal({
           await deleteDoc(doc(db, 'users', user.uid, 'trash_folders', item.id))
         } else {
           const response = await fetch(
-            `${WORKER_URL}/delete/${item.id}?userId=${encodeURIComponent(user.uid)}`,
+            `${WORKER_URL}/delete/${encodeURIComponent(item.id)}?userId=${encodeURIComponent(user.uid)}`,
             { method: 'DELETE' },
           )
           const data = await response.json()

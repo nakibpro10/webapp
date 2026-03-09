@@ -34,7 +34,10 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
   useEffect(() => {
     if (!user) return
     fetch(`${WORKER_URL}/files?userId=${encodeURIComponent(user.uid)}`)
-      .then((r) => r.json())
+      .then((r) => {
+        if (!r.ok) throw new Error(`HTTP ${r.status}`)
+        return r.json()
+      })
       .then((data) => {
         if (data.success) {
           const total = (data.files as FileData[])
