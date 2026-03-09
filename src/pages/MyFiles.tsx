@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import {
   Home,
   ChevronRight,
@@ -19,7 +19,11 @@ import { useLanguage } from '../context/LanguageContext'
 import useFiles from '../hooks/useFiles'
 import FileCard from '../components/FileCard'
 import FolderCard from '../components/FolderCard'
-import type { ViewMode, SortField, FolderData } from '../types/files'
+import UploadPanel, { type UploadPanelHandle } from '../components/UploadPanel'
+import CreateFolderModal from '../components/modals/CreateFolderModal'
+import RenameModal from '../components/modals/RenameModal'
+import DeleteModal from '../components/modals/DeleteModal'
+import type { ViewMode, SortField, FolderData, FileData } from '../types/files'
 import './MyFiles.css'
 
 interface SortOption {
@@ -45,10 +49,12 @@ export default function MyFiles() {
     folders,
     loading,
     error,
+    currentPath,
     pathArray,
     navigateToFolder,
     sortField,
     setSortField,
+    refresh,
   } = useFiles()
 
   const [viewMode, setViewMode] = useState<ViewMode>('grid')
@@ -56,6 +62,15 @@ export default function MyFiles() {
   const [selectedItems, setSelectedItems] = useState<string[]>([])
   const [searchQuery, setSearchQuery] = useState('')
   const [searchOpen, setSearchOpen] = useState(false)
+
+  /* ── modal state ── */
+  const [createFolderOpen, setCreateFolderOpen] = useState(false)
+  const [renameItem, setRenameItem] = useState<(FileData | FolderData) | null>(null)
+  const [deleteItem, setDeleteItem] = useState<(FileData | FolderData) | null>(null)
+  const [deletePermanent, setDeletePermanent] = useState(false)
+
+  /* ── upload panel ref ── */
+  const uploadPanelRef = useRef<UploadPanelHandle>(null)
 
   /* ── filtering ── */
   const query = searchQuery.toLowerCase().trim()
@@ -241,7 +256,7 @@ export default function MyFiles() {
             <span className="lang-en">Upload your first file or create a folder to get started</span>
             <span className="lang-bn">শুরু করতে আপনার প্রথম ফাইল আপলোড করুন বা ফোল্ডার তৈরি করুন</span>
           </p>
-          <button className="empty-upload-btn">
+          <button className="empty-upload-btn" onClick={() => uploadPanelRef.current?.triggerFileInput()}>
             <Upload size={16} />
             <span className="lang-en">Upload Files</span>
             <span className="lang-bn">ফাইল আপলোড করুন</span>
@@ -275,6 +290,34 @@ export default function MyFiles() {
           ))}
         </div>
       )}
+      {/* ── Modals ── */}
+      <CreateFolderModal
+        open={createFolderOpen}
+        currentPath={currentPath}
+        onClose={() => setCreateFolderOpen(false)}
+        onCreated={refresh}
+      />
+      <RenameModal
+        open={renameItem !== null}
+        item={renameItem}
+        onClose={() => setRenameItem(null)}
+        onRenamed={refresh}
+      />
+      <DeleteModal
+        open={deleteItem !== null}
+        item={deleteItem}
+        permanent={deletePermanent}
+        onClose={() => { setDeleteItem(null); setDeletePermanent(false) }}
+        onDeleted={refresh}
+      />
+
+      {/* ── Upload Panel ── */}
+      <UploadPanel
+        ref={uploadPanelRef}
+        currentPath={currentPath}
+        encryptionKey={null}
+        onUploadComplete={refresh}
+      />
     </>
   )
 }

@@ -1,0 +1,206 @@
+/* ==================== UPLOAD PANEL ==================== */
+.upload-panel {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  width: 380px;
+  background: var(--bg-primary);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--modal-shadow);
+  border: 1px solid var(--border-light);
+  z-index: 500;
+  display: none;
+  overflow: hidden;
+  animation: uploadSlideUp 0.3s ease;
+}
+
+@keyframes uploadSlideUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.upload-panel.active {
+  display: block;
+}
+
+.upload-panel.minimized .upload-panel-body {
+  display: none;
+}
+
+.upload-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  background: var(--gradient-primary);
+  color: white;
+}
+
+.upload-panel-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.upload-panel-count {
+  padding: 2px 10px;
+  background: rgba(255,255,255,0.2);
+  border-radius: var(--radius-full);
+  font-size: 12px;
+}
+
+.upload-panel-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.upload-panel-btn {
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: rgba(255,255,255,0.15);
+  color: white;
+  cursor: pointer;
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition-fast);
+}
+
+.upload-panel-btn:hover {
+  background: rgba(255,255,255,0.25);
+}
+
+.upload-panel-body {
+  max-height: 320px;
+  overflow-y: auto;
+}
+
+/* ==================== UPLOAD ITEM ==================== */
+.upload-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--border-light);
+  transition: background var(--transition-fast);
+}
+
+.upload-item:last-child {
+  border-bottom: none;
+}
+
+.upload-item:hover {
+  background: var(--bg-secondary);
+}
+
+.upload-item-icon {
+  width: 44px;
+  height: 44px;
+  background: var(--bg-tertiary);
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-secondary);
+  flex-shrink: 0;
+}
+
+.upload-item-icon.uploading {
+  background: var(--primary-light);
+  color: var(--primary);
+}
+
+.upload-item-icon.success {
+  background: rgba(76, 175, 80, 0.1);
+  color: #4caf50;
+}
+
+.upload-item-icon.error {
+  background: rgba(244, 67, 54, 0.1);
+  color: #f44336;
+}
+
+.upload-item-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.upload-item-name {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-primary);
+  margin-bottom: 6px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.upload-item-progress {
+  height: 6px;
+  background: var(--bg-tertiary);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  margin-bottom: 6px;
+}
+
+.upload-item-progress-bar {
+  height: 100%;
+  background: var(--gradient-primary);
+  border-radius: var(--radius-full);
+  transition: width 0.3s ease;
+  position: relative;
+}
+
+.upload-item-progress-bar::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+  animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+  from { transform: translateX(-100%); }
+  to   { transform: translateX(100%); }
+}
+
+.upload-item-status {
+  font-size: 12px;
+  color: var(--text-tertiary);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.upload-item-status.success { color: #4caf50; }
+.upload-item-status.error   { color: #f44336; }
+
+.upload-item-action {
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: transparent;
+  color: var(--text-tertiary);
+  cursor: pointer;
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition-fast);
+  flex-shrink: 0;
+}
+
+.upload-item-action:hover {
+  background: rgba(244, 67, 54, 0.1);
+  color: #f44336;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .upload-item-progress-bar::after {
+    animation: none;
+  }
+}
