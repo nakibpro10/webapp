@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import AuthLayout from './layouts/AuthLayout'
 import DashboardLayout from './layouts/DashboardLayout'
 import Auth from './pages/Auth'
+import MyFiles from './pages/MyFiles'
 
 function App() {
   return (
@@ -17,7 +18,7 @@ function App() {
 
         {/* Dashboard routes */}
         <Route path="/dashboard" element={<DashboardLayout />}>
-          <Route index element={<div>Dashboard content placeholder</div>} />
+          <Route index element={<MyFiles />} />
         </Route>
       </Routes>
     </BrowserRouter>
