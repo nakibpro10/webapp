@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react'
+import ReactDOM from 'react-dom'
 import { Download, Pencil, Trash2 } from 'lucide-react'
 import type { FileData, FolderData } from '../types/files'
 import './ContextMenu.css'
@@ -31,15 +32,22 @@ export default function ContextMenu({
     function handleClick(e: MouseEvent) {
       if (ref.current && !ref.current.contains(e.target as Node)) onClose()
     }
+    function handleKey(e: KeyboardEvent) {
+      if (e.key === 'Escape') onClose()
+    }
     document.addEventListener('mousedown', handleClick)
-    return () => document.removeEventListener('mousedown', handleClick)
+    document.addEventListener('keydown', handleKey)
+    return () => {
+      document.removeEventListener('mousedown', handleClick)
+      document.removeEventListener('keydown', handleKey)
+    }
   }, [onClose])
 
   if (!item) return null
 
   const isFile = !('isFolder' in item)
 
-  return (
+  const menu = (
     <div ref={ref} className="context-menu" style={{ top: y, left: x }}>
       {isFile && onDownload && (
         <button
@@ -76,4 +84,10 @@ export default function ContextMenu({
       </button>
     </div>
   )
+
+  // render into document.body to avoid clipping / stacking-context issues
+  if (typeof document !== 'undefined' && document.body) {
+    return ReactDOM.createPortal(menu, document.body)
+  }
+  return menu
 }
