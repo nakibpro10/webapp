@@ -1,0 +1,14 @@
+/* ==================== DATE SECTION ==================== */
+.date-section-header {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    padding: 12px 4px 8px;
+    border-bottom: 1px solid var(--border-light);
+    margin-bottom: 16px;
+    margin-top: 24px;
+}
+
+.date-section-header:first-of-type {
+    margin-top: 0;
+}

@@ -1,0 +1,104 @@
+/* ==================== TRASH PAGE ==================== */
+
+/* ── Empty Trash button ── */
+.empty-trash-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 18px;
+    border: none;
+    border-radius: var(--radius-md);
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    background: var(--danger);
+    color: #fff;
+    transition: all var(--transition-fast);
+}
+
+.empty-trash-btn:hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
+}
+
+.empty-trash-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* ── Info banner ── */
+.trash-info-banner {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 16px 20px;
+    background: var(--bg-primary);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-md);
+    margin-bottom: 24px;
+    font-size: 14px;
+    color: var(--text-secondary);
+}
+
+/* ── Trash item actions overlay ── */
+.trash-item-actions {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    display: flex;
+    gap: 6px;
+    opacity: 0;
+    transition: opacity var(--transition-fast);
+    z-index: 3;
+}
+
+.file-card:hover .trash-item-actions,
+.folder-card:hover .trash-item-actions {
+    opacity: 1;
+}
+
+.trash-action-btn {
+    width: 32px;
+    height: 32px;
+    border: none;
+    border-radius: var(--radius-full);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.trash-action-btn.restore {
+    background: var(--success-light);
+    color: var(--success);
+}
+
+.trash-action-btn.restore:hover {
+    background: var(--success);
+    color: #fff;
+}
+
+.trash-action-btn.delete-forever {
+    background: var(--danger-light);
+    color: var(--danger);
+}
+
+.trash-action-btn.delete-forever:hover {
+    background: var(--danger);
+    color: #fff;
+}
+
+/* ── List view actions ── */
+.files-container.list-view .trash-item-actions {
+    position: relative;
+    top: auto;
+    right: auto;
+    opacity: 1;
+}
+
+/* ── Trash card wrapper — adds relative positioning for actions overlay ── */
+.trash-card-wrapper {
+    position: relative;
+}

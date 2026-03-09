@@ -1,0 +1,687 @@
+/* ==================== BREADCRUMB ==================== */
+.breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+    padding: 12px 16px;
+    background: var(--bg-primary);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-light);
+}
+
+.breadcrumb-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    border-radius: var(--radius-sm);
+    color: var(--text-secondary);
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    text-decoration: none;
+    background: none;
+    border: none;
+}
+
+.breadcrumb-item:hover {
+    background: var(--bg-hover);
+    color: var(--text-primary);
+}
+
+.breadcrumb-item.active {
+    color: var(--text-primary);
+    font-weight: 600;
+    cursor: default;
+}
+
+.breadcrumb-item.active:hover {
+    background: transparent;
+}
+
+.breadcrumb-separator {
+    color: var(--text-disabled);
+    font-size: 12px;
+}
+
+/* ==================== CONTENT HEADER ==================== */
+.content-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+
+.content-title-section {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.content-title {
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.content-count {
+    padding: 6px 14px;
+    background: var(--bg-tertiary);
+    border-radius: var(--radius-full);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-secondary);
+}
+
+.content-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+/* ==================== VIEW TOGGLE ==================== */
+.view-toggle {
+    display: flex;
+    background: var(--bg-tertiary);
+    border-radius: var(--radius-md);
+    padding: 4px;
+    border: 1px solid var(--border-light);
+}
+
+.view-toggle-btn {
+    padding: 10px 14px;
+    border: none;
+    background: transparent;
+    color: var(--text-tertiary);
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: var(--radius-sm);
+    transition: all var(--transition-fast);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.view-toggle-btn:hover {
+    color: var(--text-primary);
+}
+
+.view-toggle-btn.active {
+    background: var(--bg-primary);
+    color: var(--primary);
+    box-shadow: var(--card-shadow);
+}
+
+/* ==================== SORT DROPDOWN ==================== */
+.sort-dropdown {
+    position: relative;
+}
+
+.sort-btn {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 18px;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.sort-btn:hover {
+    background: var(--bg-hover);
+    border-color: var(--primary);
+}
+
+.sort-btn .sort-icon {
+    color: var(--text-tertiary);
+}
+
+.sort-btn .chevron {
+    color: var(--text-tertiary);
+    transition: transform var(--transition-fast);
+}
+
+.sort-dropdown.open .sort-btn .chevron {
+    transform: rotate(180deg);
+}
+
+.sort-menu {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    background: var(--bg-primary);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--modal-shadow);
+    border: 1px solid var(--border-light);
+    min-width: 200px;
+    padding: 8px 0;
+    display: none;
+    z-index: 100;
+}
+
+.sort-dropdown.open .sort-menu {
+    display: block;
+}
+
+.sort-option {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 18px;
+    color: var(--text-primary);
+    font-size: 14px;
+    cursor: pointer;
+    transition: background var(--transition-fast);
+    border: none;
+    background: none;
+    width: 100%;
+}
+
+.sort-option:hover {
+    background: var(--bg-hover);
+}
+
+.sort-option.active {
+    background: var(--primary-light);
+    color: var(--primary);
+}
+
+.sort-option .option-icon {
+    width: 18px;
+    text-align: center;
+    color: var(--text-tertiary);
+}
+
+.sort-option.active .option-icon {
+    color: var(--primary);
+}
+
+.sort-option .check-icon {
+    margin-left: auto;
+    display: none;
+}
+
+.sort-option.active .check-icon {
+    display: block;
+    color: var(--primary);
+}
+
+/* ==================== FILES CONTAINER (GRID) ==================== */
+.files-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 20px;
+}
+
+/* ==================== FILES CONTAINER (LIST) ==================== */
+.files-container.list-view {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+/* ==================== FILE CARD ==================== */
+.file-card {
+    background: var(--bg-primary);
+    border-radius: var(--radius-lg);
+    border: 2px solid var(--border-light);
+    padding: 20px;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    min-height: 180px;
+}
+
+.file-card:hover {
+    border-color: var(--primary);
+    box-shadow: var(--card-shadow-hover);
+    transform: translateY(-4px);
+}
+
+.file-card.selected {
+    border-color: var(--primary);
+    background: var(--primary-light);
+}
+
+.file-card.selected .file-card-checkbox {
+    opacity: 1;
+    background: var(--primary);
+    border-color: var(--primary);
+}
+
+.file-card.selected .file-card-checkbox svg {
+    opacity: 1;
+}
+
+/* ==================== FILE CARD CHECKBOX ==================== */
+.file-card-checkbox {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    width: 24px;
+    height: 24px;
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    background: var(--bg-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: all var(--transition-fast);
+    z-index: 2;
+}
+
+.file-card:hover .file-card-checkbox {
+    opacity: 1;
+}
+
+.file-card-checkbox svg {
+    color: white;
+    opacity: 0;
+}
+
+/* ==================== FILE CARD MENU ==================== */
+.file-card-menu {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    width: 32px;
+    height: 32px;
+    border: none;
+    background: var(--bg-tertiary);
+    color: var(--text-secondary);
+    cursor: pointer;
+    border-radius: var(--radius-full);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: all var(--transition-fast);
+    z-index: 2;
+}
+
+.file-card:hover .file-card-menu {
+    opacity: 1;
+}
+
+.file-card-menu:hover {
+    background: var(--bg-hover);
+    color: var(--text-primary);
+}
+
+/* ==================== FILE ICON ==================== */
+.file-icon-wrapper {
+    width: 72px;
+    height: 72px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 16px;
+    transition: transform var(--transition-fast);
+    position: relative;
+}
+
+.file-card:hover .file-icon-wrapper {
+    transform: scale(1.1);
+}
+
+.file-icon-wrapper.folder { color: #FFC107; }
+.file-icon-wrapper.image { color: #E91E63; }
+.file-icon-wrapper.video { color: #9C27B0; }
+.file-icon-wrapper.audio { color: #00BCD4; }
+.file-icon-wrapper.document { color: #2196F3; }
+.file-icon-wrapper.pdf { color: #F44336; }
+.file-icon-wrapper.spreadsheet { color: #4CAF50; }
+.file-icon-wrapper.presentation { color: #FF5722; }
+.file-icon-wrapper.code { color: #607D8B; }
+.file-icon-wrapper.archive { color: #795548; }
+.file-icon-wrapper.other { color: #9E9E9E; }
+
+/* ==================== FILE INFO ==================== */
+.file-name {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 6px;
+    word-break: break-word;
+    line-height: 1.4;
+    max-height: 40px;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+}
+
+.file-meta {
+    font-size: 12px;
+    color: var(--text-tertiary);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.file-meta .dot {
+    width: 3px;
+    height: 3px;
+    background: var(--text-disabled);
+    border-radius: 50%;
+}
+
+.file-starred {
+    position: absolute;
+    bottom: 12px;
+    right: 12px;
+    color: #FFC107;
+}
+
+/* ==================== LIST VIEW OVERRIDES ==================== */
+.files-container.list-view .file-card {
+    flex-direction: row;
+    align-items: center;
+    text-align: left;
+    padding: 12px 20px;
+    min-height: auto;
+    gap: 16px;
+}
+
+.files-container.list-view .file-card:hover {
+    transform: none;
+}
+
+.files-container.list-view .file-card-checkbox {
+    position: relative;
+    top: auto;
+    left: auto;
+    opacity: 1;
+    background: var(--bg-tertiary);
+}
+
+.files-container.list-view .file-icon-wrapper {
+    width: 44px;
+    height: 44px;
+    margin-bottom: 0;
+    flex-shrink: 0;
+}
+
+.files-container.list-view .file-card:hover .file-icon-wrapper {
+    transform: none;
+}
+
+.files-container.list-view .file-info {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    min-width: 0;
+}
+
+.files-container.list-view .file-name {
+    flex: 1;
+    min-width: 0;
+    margin-bottom: 0;
+    max-height: none;
+    -webkit-line-clamp: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.files-container.list-view .file-date {
+    width: 140px;
+    font-size: 13px;
+    color: var(--text-secondary);
+    flex-shrink: 0;
+}
+
+.files-container.list-view .file-size {
+    width: 100px;
+    font-size: 13px;
+    color: var(--text-secondary);
+    text-align: right;
+    flex-shrink: 0;
+}
+
+.files-container.list-view .file-card-menu {
+    position: relative;
+    top: auto;
+    right: auto;
+    opacity: 1;
+}
+
+.files-container.list-view .file-meta {
+    display: none;
+}
+
+.files-container.list-view .file-starred {
+    position: relative;
+    bottom: auto;
+    right: auto;
+}
+
+/* ==================== EMPTY STATE ==================== */
+.empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 80px 40px;
+    text-align: center;
+}
+
+.empty-state-icon {
+    width: 140px;
+    height: 140px;
+    margin-bottom: 32px;
+    background: var(--bg-tertiary);
+    border-radius: var(--radius-full);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-disabled);
+    position: relative;
+}
+
+.empty-state-icon::before {
+    content: '';
+    position: absolute;
+    inset: -8px;
+    border: 3px dashed var(--border-color);
+    border-radius: var(--radius-full);
+    animation: rotate 20s linear infinite;
+}
+
+.empty-state h3 {
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 12px;
+}
+
+.empty-state p {
+    font-size: 15px;
+    color: var(--text-secondary);
+    margin-bottom: 28px;
+    max-width: 400px;
+    line-height: 1.6;
+}
+
+/* ==================== LOADING STATE ==================== */
+.loading-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    padding: 60px 20px;
+    color: var(--text-secondary);
+}
+
+.loading-spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid var(--border-light);
+    border-top-color: var(--primary);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+/* ==================== TRASH STATES ==================== */
+.trash-info-banner {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 16px 20px;
+    background: var(--bg-primary);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-md);
+    margin-bottom: 24px;
+    font-size: 14px;
+    color: var(--text-secondary);
+}
+
+.trash-empty-state {
+    text-align: center;
+    padding: 80px 20px;
+}
+
+.trash-empty-icon {
+    width: 140px;
+    height: 140px;
+    margin: 0 auto 32px;
+    background: var(--bg-tertiary);
+    border-radius: var(--radius-full);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-disabled);
+}
+
+.trash-empty-state h3 {
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 10px;
+}
+
+.trash-empty-state p {
+    font-size: 15px;
+    color: var(--text-secondary);
+}
+
+/* ==================== UPLOAD BUTTON ==================== */
+.empty-upload-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 14px 28px;
+    border: none;
+    border-radius: var(--radius-md);
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    background: var(--gradient-primary);
+    color: white;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+}
+
+.empty-upload-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
+}
+
+/* ==================== ANIMATIONS ==================== */
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+@keyframes rotate {
+    to { transform: rotate(360deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .empty-state-icon::before {
+        animation: none;
+    }
+    .loading-spinner {
+        animation: none;
+    }
+}
+
+/* ==================== RESPONSIVE ==================== */
+@media (max-width: 768px) {
+    .content-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .content-actions {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .files-container {
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+        gap: 12px;
+    }
+
+    .file-card {
+        padding: 16px;
+        min-height: 160px;
+    }
+
+    .file-icon-wrapper {
+        width: 56px;
+        height: 56px;
+    }
+
+    .file-name {
+        font-size: 13px;
+    }
+
+    .files-container.list-view .file-info {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 4px;
+    }
+
+    .files-container.list-view .file-date,
+    .files-container.list-view .file-size {
+        width: auto;
+        font-size: 12px;
+    }
+}
+
+@media (max-width: 480px) {
+    .files-container {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .breadcrumb {
+        overflow-x: auto;
+        flex-wrap: nowrap;
+        padding-bottom: 12px;
+    }
+
+    .breadcrumb-item {
+        flex-shrink: 0;
+    }
+
+    .sort-btn span {
+        display: none;
+    }
+}
