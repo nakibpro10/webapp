@@ -59,7 +59,7 @@ export default function CreateFolderModal({
         const data = doc.data()
         return (
           data.name === trimmed &&
-          (data.parentId || 'root') === currentPath &&
+          (data.parentId || 'root') === (currentPath || 'root') &&
           !data.trashed
         )
       })
@@ -72,7 +72,7 @@ export default function CreateFolderModal({
 
       await addDoc(foldersRef, {
         name: trimmed,
-        parentId: currentPath,
+        parentId: currentPath || 'root',
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
         starred: false,

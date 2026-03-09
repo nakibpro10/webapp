@@ -123,7 +123,10 @@ export default function RenameModal({
               <Pencil size={20} />
             </div>
             <div className="rename-file-details">
-              <div>{en ? fileType.charAt(0).toUpperCase() + fileType.slice(1) : fileType}</div>
+              <div>
+                <span className="lang-en">{fileType.charAt(0).toUpperCase() + fileType.slice(1)}</span>
+                <span className="lang-bn">{fileType.charAt(0).toUpperCase() + fileType.slice(1)}</span>
+              </div>
               <div>{'size' in item ? formatSize(item.size) : '—'}</div>
             </div>
           </div>

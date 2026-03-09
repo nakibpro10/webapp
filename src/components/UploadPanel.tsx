@@ -113,7 +113,7 @@ const UploadPanel = forwardRef<UploadPanelHandle, UploadPanelProps>(function Upl
 
   /** Upload a single item with chunked upload */
   async function uploadItem(item: UploadItem) {
-    if (!user || !encryptionKey) return
+    if (!user) return
 
     // Mark uploading
     updateItems((prev) =>
@@ -139,8 +139,10 @@ const UploadPanel = forwardRef<UploadPanelHandle, UploadPanelProps>(function Upl
         const chunk = file.slice(start, end)
         const chunkSize = chunk.size
 
-        // Encrypt chunk
-        const encryptedChunk = await encryptData(chunk, encryptionKey)
+        // Encrypt chunk if encryption key is available, otherwise upload raw
+        const chunkBlob: Blob = encryptionKey
+          ? await encryptData(chunk, encryptionKey)
+          : chunk
 
         // Upload with retry
         let uploaded = false
@@ -149,7 +151,7 @@ const UploadPanel = forwardRef<UploadPanelHandle, UploadPanelProps>(function Upl
         while (!uploaded && retries < MAX_RETRY_ATTEMPTS) {
           try {
             const formData = new FormData()
-            formData.append('chunk', encryptedChunk, `${file.name}.part${chunkIndex}`)
+            formData.append('chunk', chunkBlob, `${file.name}.part${chunkIndex}`)
             formData.append('chunkIndex', String(chunkIndex))
             formData.append('totalChunks', String(totalChunks))
             formData.append('fileId', fileId)

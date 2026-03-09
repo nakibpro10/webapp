@@ -25,7 +25,8 @@ export default function DeleteModal({
   onDeleted,
 }: DeleteModalProps) {
   const { user } = useAuth()
-  useLanguage() // ensure language context applies .lang-en/.lang-bn visibility
+  const { language: _lang } = useLanguage()
+  void _lang // context drives .lang-en / .lang-bn CSS visibility
 
   const [loading, setLoading] = useState(false)
 

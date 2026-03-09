@@ -271,7 +271,7 @@
 }
 
 .plan-card.popular::before {
-  content: '';
+  content: 'Popular';
   position: absolute;
   top: -1px;
   left: 50%;
