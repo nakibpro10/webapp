@@ -25,6 +25,7 @@ import RenameModal from '../components/modals/RenameModal'
 import DeleteModal from '../components/modals/DeleteModal'
 import type { ViewMode, SortField, FolderData, FileData } from '../types/files'
 import ContextMenu from '../components/ContextMenu'
+import FilePreviewModal from '../components/FilePreviewModal'
 import './MyFiles.css'
 
 interface SortOption {
@@ -63,6 +64,9 @@ export default function MyFiles() {
   const [selectedItems, setSelectedItems] = useState<string[]>([])
   const [searchQuery, setSearchQuery] = useState('')
   const [searchOpen, setSearchOpen] = useState(false)
+
+  /* ── preview state ── */
+  const [previewFile, setPreviewFile] = useState<FileData | null>(null)
 
   /* ── modal state ── */
   const [createFolderOpen, setCreateFolderOpen] = useState(false)
@@ -310,6 +314,7 @@ export default function MyFiles() {
               lang={language}
               onSelect={toggleSelect}
               onContextMenu={handleContextMenu}
+              onClick={setPreviewFile}
             />
           ))}
         </div>
@@ -342,6 +347,15 @@ export default function MyFiles() {
         encryptionKey={null}
         onUploadComplete={refresh}
       />
+
+      {/* ── File Preview Modal ── */}
+      {previewFile && (
+        <FilePreviewModal
+          file={previewFile}
+          lang={language}
+          onClose={() => setPreviewFile(null)}
+        />
+      )}
 
       {/* ── Context Menu ── */}
       {contextMenu && (

@@ -1,4 +1,5 @@
 import { NavLink, Link } from 'react-router-dom'
+import { useState, useEffect } from 'react'
 import {
   Cloud,
   X,
@@ -14,7 +15,12 @@ import {
   Trash2,
   Crown,
 } from 'lucide-react'
+import { useAuth } from '../context/AuthContext'
+import type { FileData } from '../types/files'
 import './Sidebar.css'
+
+const WORKER_URL = 'https://cloud.nakibpro1.workers.dev'
+const STORAGE_LIMIT = 5 * 1024 * 1024 * 1024 // 5GB
 
 interface SidebarProps {
   isOpen: boolean
@@ -22,6 +28,33 @@ interface SidebarProps {
 }
 
 export default function Sidebar({ isOpen, onClose }: SidebarProps) {
+  const { user } = useAuth()
+  const [usedBytes, setUsedBytes] = useState(0)
+
+  useEffect(() => {
+    if (!user) return
+    fetch(`${WORKER_URL}/files?userId=${encodeURIComponent(user.uid)}`)
+      .then((r) => r.json())
+      .then((data) => {
+        if (data.success) {
+          const total = (data.files as FileData[])
+            .filter((f) => !f.trashed)
+            .reduce((s, f) => s + (f.size || 0), 0)
+          setUsedBytes(total)
+        }
+      })
+      .catch(() => {})
+  }, [user])
+
+  const usedPercent = Math.min((usedBytes / STORAGE_LIMIT) * 100, 100)
+
+  function formatUsed(bytes: number): string {
+    const MB = 1024 * 1024
+    const GB = 1024 * MB
+    if (bytes < MB) return (bytes / 1024).toFixed(1) + ' KB'
+    if (bytes < GB) return (bytes / MB).toFixed(1) + ' MB'
+    return (bytes / GB).toFixed(2) + ' GB'
+  }
   return (
     <aside className={`sidebar${isOpen ? ' open' : ''}`}>
       <div className="sidebar-header">
@@ -109,14 +142,14 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
         <div className="storage-info">
           <div className="storage-header">
             <span>
-              <strong>0 MB</strong>{' '}
+              <strong>{formatUsed(usedBytes)}</strong>{' '}
               <span className="lang-en">used</span>
               <span className="lang-bn">ব্যবহৃত</span>
             </span>
-            <span>/ Unlimited</span>
+            <span>/ 5 GB</span>
           </div>
           <div className="storage-bar">
-            <div className="storage-bar-fill" style={{ width: '0%' }} />
+            <div className="storage-bar-fill" style={{ width: `${usedPercent}%` }} />
           </div>
           <div className="storage-text">
             <span className="user-status-badge trial">

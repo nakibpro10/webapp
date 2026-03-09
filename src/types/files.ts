@@ -19,6 +19,7 @@ export interface FileData {
   isStarred: boolean
   trashed?: boolean
   trashedAt?: string
+  url?: string
   chunks?: { index: number; fileId: string }[]
 }
 

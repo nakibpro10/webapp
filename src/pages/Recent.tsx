@@ -7,6 +7,7 @@ import {
 import { useAuth } from '../context/AuthContext'
 import { useLanguage } from '../context/LanguageContext'
 import FileCard from '../components/FileCard'
+import FilePreviewModal from '../components/FilePreviewModal'
 import type { ViewMode, FileData } from '../types/files'
 import './Recent.css'
 
@@ -53,6 +54,7 @@ export default function Recent() {
   const [files, setFiles] = useState<FileData[]>([])
   const [loading, setLoading] = useState(true)
   const [viewMode, setViewMode] = useState<ViewMode>('grid')
+  const [previewFile, setPreviewFile] = useState<FileData | null>(null)
 
   const loadFiles = useCallback(async () => {
     if (!user) { setLoading(false); return }
@@ -152,11 +154,19 @@ export default function Recent() {
                 view={viewMode}
                 selected={false}
                 lang={language}
+                onClick={setPreviewFile}
               />
             ))}
           </div>
         </div>
       ))}
+      {previewFile && (
+        <FilePreviewModal
+          file={previewFile}
+          lang={language}
+          onClose={() => setPreviewFile(null)}
+        />
+      )}
     </>
   )
 }
